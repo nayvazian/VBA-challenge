@@ -1,0 +1,43 @@
+Sub stocks()
+
+Dim i As Long
+Dim k As Long
+Dim j As Long
+i = 2
+k = 2
+lastrow = ActiveSheet.UsedRange.Rows.Count
+
+Cells(1, 8).Value = "Ticker"
+Cells(1, 9).Value = "Yearly Change"
+Cells(1, 10).Value = "Percent Change"
+Cells(1, 11).Value = "Total Stock Volume"
+
+For j = 2 To lastrow
+    If Cells(j, 1).Value <> Cells(j + 1, 1).Value Then
+
+        'The ticker symbol.
+        Cells(k, 8).Value = Cells(j, 1).Value
+        'Yearly change from opening price at the beginning of a given year to the closing price at the end of that year.
+        Cells(k, 9).Value = Cells(j, 6) - Cells(i, 3)
+        'The percent change from opening price at the beginning of a given year to the closing price at the end of that year.
+        Cells(k, 10).Value = FormatPercent((Cells(j, 6) - Cells(i, 3)) / Cells(i, 3), 2)
+        'Formats Cell Interior
+        If Cells(k, 10).Value > 0 Then
+            Cells(k, 10).Interior.ColorIndex = 4
+        ElseIf Cells(k, 10).Value = 0 Then
+            Cells(k, 10).Interior.ColorIndex = 15
+        ElseIf Cells(k, 10).Value < 0 Then
+            Cells(k, 10).Interior.ColorIndex = 3
+        End If
+        'The total stock volume of the stock.
+        Cells(k, 11).Value = Application.Sum(Range(Cells(i, 7), Cells(j, 7)))
+        'Update i and k
+        i = j + 1
+        k = k + 1
+    Else
+    End If
+Next j
+
+End Sub
+
+
